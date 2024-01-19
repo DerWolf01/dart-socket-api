@@ -5,12 +5,14 @@ class Reflector extends Reflectable {
       : super(
           // superclassQuantifyCapability,
           subtypeQuantifyCapability,
-          invokingCapability,
+
           declarationsCapability,
           metadataCapability,
           instanceInvokeCapability,
           reflectedTypeCapability,
-          invokingCapability, typeCapability,
+          invokingCapability,
+          typeCapability,
+          newInstanceCapability,
           typingCapability,
           typeRelationsCapability,
         );

@@ -11,9 +11,13 @@ class DTO extends Model {
   DTO.fromJSON(String json) : super.fromMap(jsonDecode(json));
   DTO.fromMap(super.map) : super.fromMap();
   int? id;
-  DAO? toDAO() => DAOCollector().collectDAOs().firstWhere((element) {
-        print(element.simpleName);
-        return element.simpleName ==
-            runtimeType.toString().replaceAll('DTO', 'DAO');
-      }).fromMap(toMap());
+  DAO? toDAO() {
+    var daoMirror = DAOCollector().collectDAOs().firstWhere((element) =>
+        element.simpleName == runtimeType.toString().replaceAll('DTO', 'DAO'));
+    print(daoMirror.simpleName);
+    print(daoMirror);
+    var map = toMap();
+    print("to-dao-map: $map");
+    return daoMirror.fromMap(map);
+  }
 }

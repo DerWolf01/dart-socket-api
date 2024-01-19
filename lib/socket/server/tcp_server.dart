@@ -17,10 +17,10 @@ class TCPServer {
     return _instance!;
   }
 
-  startListening() {
+  startListening() async {
     print("Start listening");
     socket.listen((client) {
-      print("client: ${client.address.address}");
+      print("client: ${client.address.rawAddress}");
       TCPClientSession(client);
     });
     print("started listening");

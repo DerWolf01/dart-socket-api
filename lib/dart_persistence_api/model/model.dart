@@ -22,14 +22,22 @@ abstract class Model {
   Model.fromMap(Map<String, dynamic> map) {
     print("map:");
     print(map);
+
     for (var attr in instanceMembers.entries) {
       var value;
       var rawValue = map[attr.key];
-      var attrType = attr.value.reflectedType;
+      Type? attrType;
+      try {
+        attrType = attr.value.reflectedType;
+      } catch (e) {
+        print(e);
+      }
+      print('${attr.key} : $rawValue');
       // print(
       //     "setting ${attr.key} --> ${(attr.value.reflectedType)} --> ${map[attr.key]}");
 
       var foreignKey = attr.value.metadata.whereType<ForeignKey>().firstOrNull;
+      print("  ${attr.key}:$rawValue ");
       if (rawValue == null || rawValue == "null") {
         // print("no value available for ${attr.key}");
         // if (attrType == List) {
@@ -40,6 +48,8 @@ abstract class Model {
         // } else {
         rawValue = null;
         // }
+      } else if (attrType == bool) {
+        value = rawValue == "true";
       } else if (foreignKey != null) {
         var mirror = foreignKey.fromModelClassMirror;
         // print(mirror.classMirror.typeArguments);
@@ -50,8 +60,11 @@ abstract class Model {
         }
       } else if (rawValue is Map && rawValue.containsKey("type")) {
         try {
+          print("raw value is map and typeOf --> ${rawValue["type"]}");
           value = DTOCollector().byMap(rawValue as Map<String, dynamic>);
-        } finally {}
+        } catch (e) {
+          print(e);
+        }
       } else {
         value = rawValue;
       }

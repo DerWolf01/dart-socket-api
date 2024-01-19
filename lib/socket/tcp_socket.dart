@@ -10,15 +10,18 @@ abstract class TCPSocket {
     socket.write(message.toJson());
 
     await socket.flush();
-    print("sent $message ");
+    print("sent ${message.toJson()} ${await socket.done}");
+
+    return;
   }
 
-  listen(dynamic Function(String data) callback) {
-    print("new listener");
-    socket.listen((event) {
-      print("callback");
-
+  listen(dynamic Function(String data) callback) async {
+    print("new listener for $runtimeType");
+    socket.listen((event) async {
+      print("$runtimeType runs callback...");
+      print(callback);
       callback(String.fromCharCodes(event));
     });
+    print("Set listener for $runtimeType");
   }
 }

@@ -4,9 +4,13 @@ import 'package:dart_socket_api/dart_persistence_api/reflector/reflector.dart';
 import 'package:reflectable/reflectable.dart';
 
 class ClassCollector {
-  ClassMirror? findByName(String name) => reflector.annotatedClasses
-      .where((element) => element.simpleName == name)
-      .firstOrNull;
+  ClassMirror? findByName(String name) =>
+      reflector.annotatedClasses.where((element) {
+        print(
+            "searchring model ${element.simpleName}:$name ${element.simpleName.toString() == name.toString()}");
+
+        return element.simpleName.toString() == name.toString();
+      }).firstOrNull;
 
   List<ClassMirror> findByType(Type type) =>
       reflector.annotatedClasses.where((element) {
@@ -17,9 +21,10 @@ class ClassCollector {
         }
       }).toList();
 
-  List<ClassMirror> findByAnnotationTypeArgument<T>() =>
-      collectWhere((c) => c.metadata.whereType<T>().firstOrNull != null)
-          .toList();
+  List<ClassMirror> findByAnnotationTypeArgument<T>() => collectWhere((c) {
+        bool ofType = c.metadata.whereType<T>().firstOrNull != null;
+        return ofType;
+      }).toList();
 
   static collect() {
     for (var lib in reflector.libraries.entries) {

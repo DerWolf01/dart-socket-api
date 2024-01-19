@@ -10,7 +10,7 @@ class Test extends DAO {
   @override
   @PrimaryKey()
   @Integer()
-  late int id = 0;
+  late int? id = 0;
 
   @Varchar()
   late String name;

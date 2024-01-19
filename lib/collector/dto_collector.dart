@@ -15,14 +15,21 @@ class DTOCollector<T extends DTO> extends ClassCollector {
 
   T? byMap(Map<String, dynamic> map) {
     try {
-      return dtoByName(map["type"])?.fromMap(map);
+      var dto = dtoByName(map["type"]);
+      print("found dto $dto");
+      return dto?.fromMap(map);
     } catch (e) {
+      print(e);
       return null;
     }
   }
 
-  DTOClassMirror<T>? dtoByName(String name) =>
-      findByName(name)?.reflectedType != null
-          ? DTOClassMirror<T>(findByName(name)!.reflectedType)
-          : null;
+  DTOClassMirror<T>? dtoByName(String name) {
+    try {
+      return DTOClassMirror<T>(findByName(name)!.reflectedType);
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
 }

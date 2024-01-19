@@ -54,7 +54,7 @@ abstract class DAO extends DPIUtility {
 
   @PrimaryKey()
   @Integer()
-  late int id;
+  late int? id;
 
   List<Field<SQLType>> get primaryKeyFields =>
       getFieldsBySQLConstraint<PrimaryKey>()

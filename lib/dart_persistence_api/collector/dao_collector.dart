@@ -13,6 +13,7 @@ class DAOCollector extends ClassCollector {
         continue;
       }
     }
+    print(daos);
     return daos;
   }
 }

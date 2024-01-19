@@ -1,13 +1,17 @@
 import 'dart:isolate';
-
+import 'package:dart_socket_api/dart_persistence_api/database/annotations/constraints/appendable/foreign_key/connection.dart';
+import 'package:dart_socket_api/dart_persistence_api/database/annotations/constraints/appendable/foreign_key/one_to_many.dart';
 import 'package:dart_socket_api/dart_persistence_api/dpi.dart';
 import 'package:dart_socket_api/dart_persistence_api/model/dto/dto.dart';
 import 'package:dart_socket_api/dart_persistence_api/reflector/reflector.dart';
-import 'package:dart_socket_api/request/request.dart';
-import 'package:dart_socket_api/response/response.dart';
+import 'package:dart_socket_api/message/request/request.dart';
+import 'package:dart_socket_api/middleware/client_middleware.dart';
+import 'package:dart_socket_api/socket/client/socket/controller/client_controller.dart';
+import 'package:dart_socket_api/socket/client/socket/controller/client_endpoint.dart';
 import 'package:dart_socket_api/socket/client/socket/tcp_client.dart';
-import 'package:dart_socket_api/socket/server/controller/controller.dart';
+import 'package:dart_socket_api/socket/server/controller/server_controller.dart';
 import 'package:dart_socket_api/socket/server/tcp_server.dart';
+import 'package:dart_socket_api/test/controller/client_user_controller.dart';
 import 'package:dart_socket_api/test/controller/user_controller.dart';
 import 'package:dart_socket_api/test/model/user/user_dao.dart';
 import 'package:dart_socket_api/test/model/user/user_dto.dart';
@@ -22,19 +26,18 @@ void main(List<String> arguments) async {
   initializeReflectable();
   await DPI.init();
 
-  var server = await TCPServer.init();
-
   Isolate.spawn((message) async {
     initializeReflectable();
-
-    var client = await TCPClient.connect();
-    client?.socket.write("Hallo");
-    print(client?.socket);
-    while (true) {
-      var m = stdin.readLineSync();
-      await client?.write(Request("/user/login", UserDTO(null, "name")));
-    } // Search for classes using annotation
+    var server = await TCPServer.init();
   }, "");
+
+  var client = await TCPClient.connect();
+  client?.socket.write("Hallo");
+  print(client?.socket);
+  while (true) {
+    var m = stdin.readLineSync();
+    await client?.write(Request("/user/login", UserDTO(null, "name")));
+  } // Search for classes using annotation
 
   // libraries.forEach((lk, l) {
   //   l.declarations.forEach((dk, d) {

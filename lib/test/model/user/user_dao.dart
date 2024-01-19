@@ -9,5 +9,5 @@ class UserDAO extends DAO {
   UserDAO.fromMap(super.map) : super.fromMap();
 
   @Varchar()
-  late String username;
+  late String name;
 }
